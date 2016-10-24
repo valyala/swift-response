@@ -48,47 +48,95 @@ It has little sense with [GOMAXPROCS](https://golang.org/pkg/runtime/) :)
 # JSON benchmarks
 
 ```
-wrk -t 1 -c 20 -d 60s --latency http://10.10.xx.xx:8090/json
+$ wrk -t 1 -c 20 -d 60s --latency http://10.10.xx.xxx:8090/json
 Running 1m test @ http://10.10.xx.xxx:8090/json
   1 threads and 20 connections
   Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency   131.55us  241.49us  16.35ms   99.53%
-    Req/Sec   151.30k     8.94k  161.57k    94.83%
+    Latency   248.10us  660.77us  29.34ms   98.64%
+    Req/Sec    95.98k     4.22k  104.16k    85.02%
   Latency Distribution
-     50%  116.00us
-     75%  136.00us
-     90%  160.00us
-     99%  273.00us
-  9031856 requests in 1.00m, 1.53GB read
-Requests/sec: 150530.40
-Transfer/sec:     26.11MB
+     50%  176.00us
+     75%  222.00us
+     90%  346.00us
+     99%    0.97ms
+  5739608 requests in 1.00m, 1.96GB read
+Requests/sec:  95501.72
+Transfer/sec:     33.33MB
 ```
 
-Results: 150K qps, 132us average latency.
-This is 26x faster than [the fastest Swift code](https://medium.com/@rymcol/benchmarks-for-the-top-server-side-swift-frameworks-vs-node-js-24460cfe0beb#7d04) with 5.7K qps and 3520us average latency :)
+Results: 95500 qps, 248us average latency.
+This is 17x faster than [the fastest Swift code](https://medium.com/@rymcol/benchmarks-for-the-top-server-side-swift-frameworks-vs-node-js-24460cfe0beb#7d04) with 5.7K qps and 3520us average latency :)
 
 
 20 concurrent connections is laughable, so below are Go results for 20K
 concurrent connections:
 
 ```
-wrk -t 1 -c 20000 -d 60s --latency http://10.10.xx.xxx:8090/json
+$ wrk -t 1 -c 20000 -d 60s --latency http://10.10.xx.xxx:8090/json
 Running 1m test @ http://10.10.xx.xxx:8090/json
   1 threads and 20000 connections
   Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency   101.56ms   10.43ms 260.03ms   70.53%
-    Req/Sec    98.60k    10.97k  133.15k    86.98%
+    Latency   142.28ms   54.24ms   1.01s    85.73%
+    Req/Sec    76.41k    12.74k  109.64k    68.27%
   Latency Distribution
-     50%  100.92ms
-     75%  108.40ms
-     90%  113.86ms
-     99%  123.18ms
-  5867954 requests in 1.00m, 0.99GB read
-Requests/sec:  97734.68
-Transfer/sec:     16.95MB
+     50%  127.46ms
+     75%  136.15ms
+     90%  224.86ms
+     99%  358.61ms
+  4533633 requests in 1.00m, 1.54GB read
+Requests/sec:  75427.92
+Transfer/sec:     26.32MB
 ```
 
-Peak memory usage for 20K concurrent connections: 360Mb.
+Peak memory usage for 20K concurrent connections: 500Mb.
+
+
+# Just for fun: nodejs performance on the same hardware
+
+Nodejs code has been taken [from the original benchmark](https://github.com/rymcol/Server-Side-Swift-Benchmarking/tree/949e5e75ab9c2b9c1741c704db330e15817c85bb/NodeJSON).
+
+20 concurrent connections:
+
+```
+$ wrk -t 1 -c 20 -d 60s --latency http://10.10.xx.xxx:8091/json
+Running 1m test @ http://10.10.xx.xxx:8091/json
+  1 threads and 20 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     2.75ms  378.70us  24.16ms   93.40%
+    Req/Sec     7.32k   431.18     8.05k    76.21%
+  Latency Distribution
+     50%    2.70ms
+     75%    2.85ms
+     90%    3.02ms
+     99%    3.56ms
+  437404 requests in 1.00m, 170.57MB read
+Requests/sec:   7277.96
+Transfer/sec:      2.84MB
+```
+
+20K concurrent connections:
+
+```
+$ wrk -t 1 -c 20000 -d 60s --latency http://10.10.xx.xxx:8091/json
+Running 1m test @ http://10.10.xx.xxx:8091/json
+  1 threads and 20000 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     1.34s   423.74ms   2.00s    65.37%
+    Req/Sec     9.33k     3.71k   21.79k    82.67%
+  Latency Distribution
+     50%    1.38s 
+     75%    1.67s 
+     90%    1.98s 
+     99%    2.00s 
+  390175 requests in 1.00m, 152.15MB read
+  Socket errors: connect 0, read 7, write 62627, timeout 131594
+Requests/sec:   6493.70
+Transfer/sec:      2.53MB
+```
+
+Pay attention to latencies and the `errors` line :)
+
+Peak memory usage for 20K concurrent connections: 700Mb.
 
 
 # Conclusions
