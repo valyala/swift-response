@@ -72,7 +72,7 @@ This is 26x faster than [the fastest Swift code](https://medium.com/@rymcol/benc
 concurrent connections:
 
 ```
-wrk -t 1 -c 20000 -d 60s --latency http://10.10.49.111:8090/json
+wrk -t 1 -c 20000 -d 60s --latency http://10.10.xx.xxx:8090/json
 Running 1m test @ http://10.10.xx.xxx:8090/json
   1 threads and 20000 connections
   Thread Stats   Avg      Stdev     Max   +/- Stdev
