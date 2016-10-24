@@ -93,7 +93,12 @@ Peak memory usage for 20K concurrent connections: 500Mb.
 
 # Just for fun: nodejs performance on the same hardware
 
-Nodejs code has been taken [from the original benchmark](https://github.com/rymcol/Server-Side-Swift-Benchmarking/tree/949e5e75ab9c2b9c1741c704db330e15817c85bb/NodeJSON).
+Node.js code has been taken [from the original benchmark](https://github.com/rymcol/Server-Side-Swift-Benchmarking/tree/949e5e75ab9c2b9c1741c704db330e15817c85bb/NodeJSON). Nodejs version:
+
+```
+$ nodejs --version
+v4.2.6
+```
 
 20 concurrent connections:
 
