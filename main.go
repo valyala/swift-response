@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/valyala/fasthttp"
 	"log"
 	"math/rand"
@@ -25,9 +26,10 @@ func requestHandler(ctx *fasthttp.RequestCtx) {
 func jsonHandler(ctx *fasthttp.RequestCtx) {
 	ctx.SetContentType("application/json; charset=utf-8")
 
-	a := make([]int, 10)
+	a := make(map[string]int, 10)
 	for i := 0; i < 10; i++ {
-		a[i] = rand.Intn(1000)
+		k := fmt.Sprintf("Test Number %d", i+1)
+		a[k] = rand.Intn(1000)
 	}
 	if err := json.NewEncoder(ctx).Encode(a); err != nil {
 		log.Printf("error when encoding json: %s", err)
