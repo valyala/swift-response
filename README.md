@@ -64,7 +64,7 @@ Requests/sec: 150530.40
 Transfer/sec:     26.11MB
 ```
 
-Results: 150K qps, 132us average latency:
+Results: 150K qps, 132us average latency.
 This is 26x faster than [the fastest Swift code](https://medium.com/@rymcol/benchmarks-for-the-top-server-side-swift-frameworks-vs-node-js-24460cfe0beb#7d04) with 5.7K qps and 3520us average latency :)
 
 
